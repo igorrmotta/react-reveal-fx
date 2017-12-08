@@ -1,9 +1,7 @@
 import * as React from 'react';
 import * as anime from 'animejs';
-import './revealer.css';
-import './normalize.css';
 
-interface Props {
+export interface RevealFxProps {
     // If true, then the content will be hidden until it´s "revealed".
     isContentHidden: boolean;
 
@@ -28,26 +26,26 @@ interface Props {
         coverArea?: number;
 
         // Callback for when the revealer is covering the element (halfway through of the whole animation).
-        onCover?: (contentEl: HTMLElement, revealerEl: HTMLElement) => boolean;
+        onCover?: (contentEl: HTMLDivElement, revealerEl: HTMLDivElement) => boolean;
 
         // Callback for when the animation starts (animation start).
-        onStart?: (contentEl: HTMLElement, revealerEl: HTMLElement) => boolean;
+        onStart?: (contentEl: HTMLDivElement, revealerEl: HTMLDivElement) => boolean;
 
         // Callback for when the revealer has completed uncovering (animation end).
-        onComplete?: (contentEl: HTMLElement, revealerEl: HTMLElement) => boolean;
+        onComplete?: (contentEl: HTMLDivElement, revealerEl: HTMLDivElement) => boolean;
     };
 }
 
-interface State {
+export interface RevealFxState {
     isAnimating: boolean;
 }
 
-class RevealFx extends React.Component<Props, State> {
+class RevealFx extends React.Component<RevealFxProps, RevealFxState> {
     el: HTMLDivElement;
     content: HTMLDivElement;
     revealer: HTMLDivElement;
 
-    constructor(props: Props) {
+    constructor(props: RevealFxProps) {
         super(props);
         this.state = {
             isAnimating: false
@@ -90,6 +88,16 @@ class RevealFx extends React.Component<Props, State> {
                 {/* Revealer element (the one that animates) */}
                 <div
                     className="block-revealer__element"
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        background: '#000',
+                        pointerEvents: 'none',
+                        opacity: 0
+                    }}
                     ref={(ref) => {
                         if (!!ref) {
                             this.revealer = ref;
@@ -104,7 +112,7 @@ class RevealFx extends React.Component<Props, State> {
     /**
      * Gets the revealer element´s transform and transform origin.
      */
-    getTransformSettings(direction: Props['revealSettings']['direction']) {
+    getTransformSettings(direction: RevealFxProps['revealSettings']['direction']) {
         var val, origin, origin2;
 
         switch (direction) {
@@ -157,7 +165,7 @@ class RevealFx extends React.Component<Props, State> {
             easing: 'easeInOutQuint',
             delay: 0,
             bgcolor: '#f0f0f0',
-            direction: 'lr' as Props['revealSettings']['direction'],
+            direction: 'lr' as RevealFxProps['revealSettings']['direction'],
             coverArea: 0
         };
         const revealSettings = this.props.revealSettings;

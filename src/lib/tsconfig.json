@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+      "outDir": "build",
+      "module": "esnext",
+      "target": "es5",
+      "lib": ["es6", "dom"],
+      "jsx": "react",
+      "moduleResolution": "node",
+      "noUnusedLocals": true,
+      "skipLibCheck": true,
+      "declaration": true,
+      "removeComments": true
+    },
+    "exclude": [
+      "node_modules",
+      "build",
+      "scripts",
+      "acceptance-tests",
+      "webpack",
+      "jest",
+      "src/setupTests.ts"
+    ]
+  }
+  
