@@ -34,6 +34,11 @@ export interface RevealFxProps {
         // Callback for when the revealer has completed uncovering (animation end).
         onComplete?: (contentEl: HTMLDivElement, revealerEl: HTMLDivElement) => boolean;
     };
+
+    overlayContent?: {
+        delay: number;
+        content: JSX.Element;
+    };
 }
 
 export interface RevealFxState {
@@ -44,6 +49,7 @@ class RevealFx extends React.Component<RevealFxProps, RevealFxState> {
     el: HTMLDivElement;
     content: HTMLDivElement;
     revealer: HTMLDivElement;
+    overlayContent: HTMLDivElement;
 
     constructor(props: RevealFxProps) {
         super(props);
@@ -103,7 +109,23 @@ class RevealFx extends React.Component<RevealFxProps, RevealFxState> {
                             this.revealer = ref;
                         }
                     }}
-                />
+                >
+                    {(this.props.overlayContent) && (
+                        <div
+                            className="block-revealer__overlayContent"
+                            style={{
+                                opacity: 0
+                            }}
+                            ref={(ref) => {
+                                if (!!ref) {
+                                    this.overlayContent = ref;
+                                }
+                            }}
+                        >
+                            {!!this.props.overlayContent && this.props.overlayContent.content}
+                        </div>
+                    )}
+                </div>
 
             </div>
         );
@@ -188,10 +210,18 @@ class RevealFx extends React.Component<RevealFxProps, RevealFxState> {
         var self = this;
 
         // Second animation step.
+        const overlayContent = this.props.overlayContent;
         const animationSettings2: anime.AnimeParams = {
             targets: self.revealer,
             duration: revealSettings.duration || defaults.duration,
             easing: revealSettings.easing || defaults.easing,
+            delay: (!!overlayContent) ? overlayContent.delay : 0,
+            begin: function () {
+                // before second animation starts set overlayContent hidden
+                if (!!overlayContent) {
+                    self.overlayContent.style.opacity = '0';
+                }
+            },
             complete: function () {
                 self.setState({ isAnimating: false });
                 if (typeof revealSettings.onComplete === 'function') {
@@ -212,12 +242,19 @@ class RevealFx extends React.Component<RevealFxProps, RevealFxState> {
                 if (typeof revealSettings.onCover === 'function') {
                     revealSettings.onCover(self.content, self.revealer);
                 }
+
+                // when first animation finishes, we can display the overlayContent if there is any
+                if (!!overlayContent) {
+                    self.overlayContent.style.opacity = '1';
+                }
+
                 anime({
                     ...animationSettings2
                 });
             },
         };
 
+        // set scale accordingly to the direction
         var coverArea = revealSettings.coverArea || defaults.coverArea;
         if (direction === 'lr' || direction === 'rl') {
             animationSettings.scaleX = [0, 1];
@@ -226,11 +263,9 @@ class RevealFx extends React.Component<RevealFxProps, RevealFxState> {
             animationSettings.scaleY = [0, 1];
             animationSettings2.scaleY = [1, coverArea / 100];
         }
-
         if (typeof revealSettings.onStart === 'function') {
             revealSettings.onStart(self.content, self.revealer);
         }
-
         anime(animationSettings);
         return true;
     }
