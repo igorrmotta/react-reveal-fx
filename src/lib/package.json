@@ -2,7 +2,7 @@
     "name": "react-reveal-fx",
     "description": "A react alternative for block reveal effect",
     "authors": "igorrmotta",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "main": "./build/RevealFx.js",
     "types": "./build/RevealFx.d.ts",
     "dependencies": {

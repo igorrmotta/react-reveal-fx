@@ -13,6 +13,10 @@ export interface RevealFxProps {
         onStart?: (contentEl: HTMLDivElement, revealerEl: HTMLDivElement) => boolean;
         onComplete?: (contentEl: HTMLDivElement, revealerEl: HTMLDivElement) => boolean;
     };
+    overlayContent?: {
+        delay: number;
+        content: JSX.Element;
+    };
 }
 export interface RevealFxState {
     isAnimating: boolean;
@@ -21,6 +25,7 @@ declare class RevealFx extends React.Component<RevealFxProps, RevealFxState> {
     el: HTMLDivElement;
     content: HTMLDivElement;
     revealer: HTMLDivElement;
+    overlayContent: HTMLDivElement;
     constructor(props: RevealFxProps);
     componentDidMount(): void;
     render(): JSX.Element;

@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -16,8 +17,9 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     }
     return t;
 };
-import * as React from 'react';
-import * as anime from 'animejs';
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = require("react");
+var anime = require("animejs");
 var RevealFx = (function (_super) {
     __extends(RevealFx, _super);
     function RevealFx(props) {
@@ -59,7 +61,13 @@ var RevealFx = (function (_super) {
                     if (!!ref) {
                         _this.revealer = ref;
                     }
-                } })));
+                } }, (this.props.overlayContent) && (React.createElement("div", { className: "block-revealer__overlayContent", style: {
+                    opacity: 0
+                }, ref: function (ref) {
+                    if (!!ref) {
+                        _this.overlayContent = ref;
+                    }
+                } }, !!this.props.overlayContent && this.props.overlayContent.content)))));
     };
     RevealFx.prototype.getTransformSettings = function (direction) {
         var val, origin, origin2;
@@ -118,10 +126,17 @@ var RevealFx = (function (_super) {
         this.revealer.style.backgroundColor = revealSettings.bgcolor || defaults.bgcolor;
         this.revealer.style.opacity = '1';
         var self = this;
+        var overlayContent = this.props.overlayContent;
         var animationSettings2 = {
             targets: self.revealer,
             duration: revealSettings.duration || defaults.duration,
             easing: revealSettings.easing || defaults.easing,
+            delay: (!!overlayContent) ? overlayContent.delay : 0,
+            begin: function () {
+                if (!!overlayContent) {
+                    self.overlayContent.style.opacity = '0';
+                }
+            },
             complete: function () {
                 self.setState({ isAnimating: false });
                 if (typeof revealSettings.onComplete === 'function') {
@@ -139,6 +154,9 @@ var RevealFx = (function (_super) {
                     self.revealer.style.transformOrigin = transformSettings.origin.halfway;
                 if (typeof revealSettings.onCover === 'function') {
                     revealSettings.onCover(self.content, self.revealer);
+                }
+                if (!!overlayContent) {
+                    self.overlayContent.style.opacity = '1';
                 }
                 anime(__assign({}, animationSettings2));
             },
@@ -160,4 +178,4 @@ var RevealFx = (function (_super) {
     };
     return RevealFx;
 }(React.Component));
-export default RevealFx;
+exports.default = RevealFx;
