@@ -22,10 +22,10 @@ export interface RevealFxState {
     isAnimating: boolean;
 }
 declare class RevealFx extends React.Component<RevealFxProps, RevealFxState> {
-    el: HTMLDivElement;
-    content: HTMLDivElement;
-    revealer: HTMLDivElement;
-    overlayContent: HTMLDivElement;
+    el: HTMLDivElement | undefined;
+    content: HTMLDivElement | undefined;
+    revealer: HTMLDivElement | undefined;
+    overlayContent: HTMLDivElement | undefined;
     constructor(props: RevealFxProps);
     componentDidMount(): void;
     render(): JSX.Element;

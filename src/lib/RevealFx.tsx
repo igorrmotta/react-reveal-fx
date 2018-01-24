@@ -46,10 +46,10 @@ export interface RevealFxState {
 }
 
 class RevealFx extends React.Component<RevealFxProps, RevealFxState> {
-    el: HTMLDivElement;
-    content: HTMLDivElement;
-    revealer: HTMLDivElement;
-    overlayContent: HTMLDivElement;
+    el: HTMLDivElement | undefined;
+    content: HTMLDivElement | undefined;
+    revealer: HTMLDivElement | undefined;
+    overlayContent: HTMLDivElement | undefined;
 
     constructor(props: RevealFxProps) {
         super(props);
@@ -175,7 +175,7 @@ class RevealFx extends React.Component<RevealFxProps, RevealFxState> {
 
     reveal() {
         // Do nothing if currently animating.
-        if (this.state.isAnimating) {
+        if (this.state.isAnimating || !this.revealer) {
             return false;
         }
 

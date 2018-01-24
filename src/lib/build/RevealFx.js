@@ -104,7 +104,7 @@ var RevealFx = (function (_super) {
         };
     };
     RevealFx.prototype.reveal = function () {
-        if (this.state.isAnimating) {
+        if (this.state.isAnimating || !this.revealer) {
             return false;
         }
         this.setState({ isAnimating: true });
