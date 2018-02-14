@@ -46,10 +46,10 @@ export interface RevealFxState {
 }
 
 class RevealFx extends React.Component<RevealFxProps, RevealFxState> {
-    el: HTMLDivElement | undefined;
-    content: HTMLDivElement | undefined;
-    revealer: HTMLDivElement | undefined;
-    overlayContent: HTMLDivElement | undefined;
+    el: HTMLDivElement;
+    content: HTMLDivElement;
+    revealer: HTMLDivElement;
+    overlayContent: HTMLDivElement;
 
     constructor(props: RevealFxProps) {
         super(props);
